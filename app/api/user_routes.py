@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile, File
 from app.application.user_service import UserService
 from app.domain.user import User
 from app.adapters.database.user_repo import UserRepository
@@ -11,6 +11,6 @@ service = UserService(repository=UserRepository())
 def show_message():
     return {"message":"Hello"}
 
-@router.post("/d")
-async def create_user(user: User):
+@router.post("/register")
+async def create_user(file: UploadFile = File(...),):
     return await service.register_user(user)

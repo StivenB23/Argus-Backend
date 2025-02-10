@@ -13,3 +13,6 @@ class UserRepository:
     async def get_by_email(self, email: str) -> Optional[User]:
         user_data = await self.collection.find_one({"email": email})
         return User(**user_data) if user_data else None
+    
+
+    
