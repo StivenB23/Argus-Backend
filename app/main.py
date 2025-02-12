@@ -1,18 +1,16 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.config.settings import settings
-from app.api.user_routes import router
-from adapters.database.mysql import database
-# Inicializar FastAPI
-app = FastAPI(title=settings.PROJECT_NAME)
-# Eventos para iniciar y cerrar la conexión a MySQL
-@app.on_event("startup")
-async def startup():
-    await database.connect()
+from app.api import role_routes, user_routes, department_routes
+from app.adapters.database.mysql import engine
 
-@app.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()
+from app.domain.models.base import Base
+
+# Inicializar FastAPI
+app = FastAPI(title="Argus🌌")
+
+Base.metadata.create_all(bind=engine)
+
+
 # Configurar CORS (Permitir peticiones desde frontend)
 app.add_middleware(
     CORSMiddleware,
@@ -22,7 +20,9 @@ app.add_middleware(
     allow_headers=["*"],  
 )
 
-app.include_router(router)
+app.include_router(user_routes.router)
+app.include_router(role_routes.router)
+app.include_router(department_routes.router)
 
 # Ruta de prueba
 @app.get("/test")

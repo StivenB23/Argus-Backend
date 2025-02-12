@@ -1,19 +1,10 @@
-# app/adapters/database/mysql.py
-from sqlalchemy.ext.declarative import declarative_base
-from databases import Database
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 # Configuración de conexión
-DATABASE_URL = "mysql+pymysql://root:admin123@localhost:3307/nombre_base_datos"
-
-# Crear conexión asíncrona
-database = Database(DATABASE_URL)
+DATABASE_URL  = "mysql+pymysql://root:admin123@localhost:3307/Argus"
 
 # Crear motor de base de datos
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, echo=True)
 
-# Metadata para los modelos
-metadata = MetaData()
-
-# Declaración de base para los modelos
-Base = declarative_base()
+SessionLocal = sessionmaker(bind=engine)
