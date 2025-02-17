@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import role_routes, user_routes, department_routes
+from app.api import role_routes, user_routes, department_routes, auth_routes
 from app.adapters.database.mysql import engine
 
 from app.domain.models.base import Base
@@ -23,6 +23,7 @@ app.add_middleware(
 app.include_router(user_routes.router)
 app.include_router(role_routes.router)
 app.include_router(department_routes.router)
+app.include_router(auth_routes.router)
 
 # Ruta de prueba
 @app.get("/test")

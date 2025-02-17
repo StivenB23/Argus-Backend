@@ -1,5 +1,5 @@
 from app.domain.schemas.rol import RolCreate
-from app.application.role_service import create_role_service
+from app.application.role_service import create_role_service, get_roles_service
 
 
 from sqlalchemy.orm import Session
@@ -17,6 +17,12 @@ def get_db():
         yield db
     finally:
         db.close()
+
+@router.get("/")
+async def get_roles(db: Session = Depends(get_db)):
+    roles = get_roles_service(db)
+    # Devolver la respuesta con los datos y la ubicación del archivo
+    return roles;
 
 @router.post("/register")
 async def create_role(rol: RolCreate, db: Session = Depends(get_db)):

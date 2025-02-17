@@ -8,6 +8,8 @@ import shutil
 import os
 from sqlalchemy.orm import Session
 from app.adapters.database.mysql import SessionLocal
+from app.api.auth_routes import decode_token
+from typing import Annotated
 
 router = APIRouter(tags=["users"], prefix="/users")
 
@@ -19,7 +21,7 @@ def get_db():
         db.close()
 
 @router.get("/message")
-def show_message():
+def show_message(user:Annotated[dict, Depends(decode_token)]):
     return {"message":"Hello"}
 
 @router.post("/upload-photo")

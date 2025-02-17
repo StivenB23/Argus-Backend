@@ -1,0 +1,6 @@
+PROJECT_NAME="My FastAPI Project"
+DEBUG=True
+SECRET_KEY="supersecretkey"
+ENCRYPTION_KEY='G0p4V3_5lDFxtMNtRbs3hYekV6dRIv76Z4Xv2J5hVhA='
+MONGO_URI=mongodb://localhost:27017
+DATABASE_NAME=
