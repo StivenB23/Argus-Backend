@@ -43,9 +43,7 @@ async def create_user(file: UploadFile = File(...)):
     # Devolver la respuesta con los datos y la ubicación del archivo
     return JSONResponse(
         content={
-            "info": f"Archivo guardado en {file_location}",
-            "name": name,
-            "surname": surname,
+            "info": f"Archivo guardado en {file_location}"
         }
     )
 
