@@ -33,6 +33,13 @@ router = APIRouter(tags=["auth"])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 def encode_token(payload:dict)->str:
     token = jwt.encode(payload, "my-secret", algorithm="HS256")
     return token
@@ -50,18 +57,18 @@ def decode_token(token: Annotated[str, Depends(oauth2_scheme)])->dict:
         )
 
 @router.post("/login")
-def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
     try:
         print(form_data.username)
         # Verificar si el usuario existe y la contraseña es correcta
-        user = get_user_by_email(form_data.username)
-        print(user)
+        user = await get_user_by_email(db, form_data.username)
+        print(user.nombre)
         if user is None:
             raise Exception("Usuario no Existe")
-        if not check_password(form_data.password, user['password']):
+        if not check_password(form_data.password, user.clave):
             raise Exception("Usuario o Contraseña Incorrectos")
         
-        token= encode_token({"id":encrypt_text(str(user['_id']), key_encrypt.encode('utf-8')), "email":user['email']})
+        token= encode_token({"id":encrypt_text(str(user.id), key_encrypt.encode('utf-8'))})
         return {"access_token": token};
     except Exception as e:
         raise HTTPException(
