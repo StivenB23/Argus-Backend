@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "My FastAPI Project"
+    PROJECT_NAME: str = "Argus🌌"
     DEBUG: bool = True
     SECRET_KEY: str = "supersecretkey"
     
