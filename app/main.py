@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import role_routes, user_routes, department_routes, auth_routes, degree_routes
+from app.api import role_routes, user_routes, department_routes, auth_routes, degree_routes, template_routes
 from app.adapters.database.mysql import engine, SessionLocal
 
 from app.domain.models.base import Base
-from app.domain.models.department import Department 
+from app.domain.models.department import Department
+from app.domain.models.instalacion import Facility
+
 # Inicializar FastAPI
 app = FastAPI(
     title="Argus🌌",
@@ -40,8 +42,23 @@ def insert_initial_departments():
         db.commit()
     db.close()
 
+def insert_initial_instalation():
+    db = SessionLocal()
+    existing = db.query(Facility).first()
+    if not existing:
+        facilities = [
+            Facility(nombre="Sede Principal", tipo="Sede", direccion="Cra 10"),
+            Facility(nombre="Sede Financiera", tipo="Sede", direccion="Cra 10"),
+            Facility(nombre="Sede Ingenieria", tipo="Sede", direccion="Cra 10"),
+            Facility(nombre="Laboratorio", tipo="Sede", direccion="Cra 10")
+        ]
+        db.add_all(facilities)
+        db.commit()
+    db.close()
+
 # Llamar a la función después de crear las tablas
 insert_initial_departments()
+insert_initial_instalation()
 
 # Configurar CORS (Permitir peticiones desde frontend)
 app.add_middleware(
@@ -57,6 +74,7 @@ app.include_router(role_routes.router)
 app.include_router(department_routes.router)
 app.include_router(auth_routes.router)
 app.include_router(degree_routes.router)
+app.include_router(template_routes.router)
 
 # Ruta de prueba
 @app.get("/test")

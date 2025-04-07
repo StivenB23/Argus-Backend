@@ -23,6 +23,11 @@ class UserUpdate(BaseModel):
     clave: Optional[str] = Field(None, description="Nueva contraseña", min_length=8, max_length=255)
     rol_id: Optional[int] = Field(None, description="Nuevo rol del usuario")
 
+class UserResponse(UserBase):
+     id: int
+     apellido: str
+     rol: str
+
 # Esquema para respuesta de usuario
 # class UserResponse(UserBase):
 #     id: int

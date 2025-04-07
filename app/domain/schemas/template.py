@@ -14,5 +14,5 @@ class TemplateBase(BaseModel):
     tipo_codigo_x: Optional[int] = None
 
 
-class TemplateCreate(TemplateBase):
+class TemplateCreateDTO(TemplateBase):
     pass

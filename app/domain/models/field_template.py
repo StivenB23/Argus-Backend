@@ -5,25 +5,19 @@ from .base import Base
 from sqlalchemy.orm import Session
 from sqlalchemy import event
 
+
 # Define tu modelo Department
-class Template(Base):
-    __tablename__ = "plantilla_carne"
-    
+class FieldTemplate(Base):
+    __tablename__ = "campo_plantilla"
+
     id = Column(Integer, primary_key=True, index=True)
-    nombre_plantilla = Column(String(30))
-    unidad_medida = Column(String(5))
-    ancho = Column(Integer)
-    alto = Column(Integer)
-    fondo = Column(String(30))
-    foto_x = Column(Integer)
-    foto_y = Column(Integer)
-    tipo_codigo = Column(String(5), nullable=True)
-    tipo_codigo_x = Column(Integer, nullable=True)
-    tipo_codigo_y = Column(Integer, nullable=True)
+    nombre = Column(String(30))
+    ubicacion_x = Column(String(5))
+    ubicacion_y = Column(Integer)
     created_at = Column(TIMESTAMP, server_default=func.now())  # Fecha de creación
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())  # Fecha de última actualización
 
 
 
     def __repr__(self):
-        return f"Template(id={self.id}, name={self.nombre_plantilla}, email={self.unidad_medida})"
+        return f"User(id={self.id}, name={self.name}, email={self.email})"

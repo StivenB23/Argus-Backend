@@ -1,4 +1,5 @@
-from app.application.user_service import create_user_service
+from app.application.encrypt import decrypt_text
+from app.application.user_service import create_user_service, get_user_by_id
 from app.domain.user import User
 from app.application.file_service import cut_out_image, delete_image_upload
 from app.domain.schemas.user import UserCreate
@@ -10,9 +11,10 @@ from sqlalchemy.orm import Session
 from app.adapters.database.mysql import SessionLocal
 from app.api.auth_routes import decode_token
 from typing import Annotated
+from fastapi.responses import JSONResponse
 
 router = APIRouter(tags=["users"], prefix="/users")
-
+key_encrypt = os.getenv("ENCRYPTION_KEY")
 def get_db():
     db = SessionLocal()
     try:
@@ -23,6 +25,12 @@ def get_db():
 @router.get("/message")
 def show_message(user:Annotated[dict, Depends(decode_token)]):
     return {"message":"Hello"}
+
+@router.get("/auth")
+async def get_information_user(user:Annotated[dict, Depends(decode_token)], db: Session = Depends(get_db)):
+    user_code = decrypt_text(user["id"], key_encrypt.encode('utf-8'))
+    user_data = await get_user_by_id(db, int(user_code))
+    return user_data
 
 @router.post("/upload-photo")
 async def create_user(file: UploadFile = File(...)):
@@ -47,7 +55,7 @@ async def create_user(file: UploadFile = File(...)):
         }
     )
 
-@router.post("/register")
+
 async def create_user(file: UploadFile = File(...), name: str = Form(...), surname: str = Form(...)):
     # Definir el directorio de destino
     save_path = "uploads/"
@@ -103,12 +111,16 @@ async def create_user(file: UploadFile = File(...), name: str = Form(...), surna
             "name": name,
             "surname": surname,})
 
+@router.post("/register")
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
-  
-    create_user_service(db, user)
-    # Devolver la respuesta con los datos y la ubicación del archivo
-    return JSONResponse(
-        content={
-            "info": f"Archivo guardado en "
-        }
-    )
+    try:
+        await create_user_service(db, user)
+        return JSONResponse(
+            content={"info": "Archivo guardado en ..."},
+            status_code=201  # Código 201 indica creación exitosa
+        )
+    except Exception as e:
+        return JSONResponse(
+            content={"error": f"Ocurrió un error: {str(e)}"},
+            status_code=500  # Código 500 indica error interno del servidor
+        )
