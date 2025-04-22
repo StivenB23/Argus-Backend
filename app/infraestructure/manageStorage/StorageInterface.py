@@ -8,3 +8,7 @@ class StorageInterface(ABC):
     async def save(self, file: UploadFile, filename: str) -> str:
         """Guarda un archivo y retorna la URL o ruta"""
         pass
+
+    @abstractmethod
+    async def get_file(self, filename):
+        pass

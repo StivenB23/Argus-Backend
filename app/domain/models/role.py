@@ -1,18 +1,17 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
-
-from .associations import rol_instalacion
+from .associations import role_facility_association
 from .base import Base
 
-# Define tu modelo User
-class Role(Base):
-    __tablename__ = "rol"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    nombre = Column(String(20))
-    estado = Column(Boolean, unique=False, default=True)
 
-    instalaciones = relationship("Facility", secondary=rol_instalacion, back_populates="roles")
+class Role(Base):
+    __tablename__ = "role"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(20))
+    is_active = Column(Boolean, default=True)
+
+    facilities = relationship("Facility", secondary=role_facility_association, back_populates="roles")
 
     def __repr__(self):
-        return f"User(id={self.id}, name={self.name}, email={self.email})"
+        return f"Role(id={self.id}, name={self.name}, active={self.is_active})"

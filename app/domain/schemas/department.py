@@ -2,11 +2,10 @@ from pydantic import BaseModel
 from typing import Optional
 
 class DepartmentBase(BaseModel):
-    nombre: str
-    codigo: str
-    descripcion: Optional[str] = None
-    correo_contacto: str
-
+    name: str
+    code: str
+    description: Optional[str] = None
+    contact_email: str
 
 class DepartmentCreate(DepartmentBase):
     pass

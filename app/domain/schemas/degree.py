@@ -2,12 +2,12 @@ from pydantic import BaseModel
 from typing import Optional
 
 class DegreeBase(BaseModel):
-    nombre: str
-    codigo: str
-    descripcion: Optional[str] = None
-    nivel: str
-    duracion: int
-    modalidad: str
+    name: str
+    code: str
+    description: Optional[str] = None
+    level: str
+    duration: int
+    modality: str
 
 class DegreeCreate(DegreeBase):
     pass

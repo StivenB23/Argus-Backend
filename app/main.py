@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import role_routes, user_routes, department_routes, auth_routes, degree_routes, template_routes
+from app.api import role_routes, user_routes, department_routes, auth_routes, degree_routes, template_routes, websocktes
 from app.adapters.database.mysql import engine, SessionLocal
 
 from app.domain.models.base import Base
@@ -32,11 +32,11 @@ def insert_initial_departments():
     existing = db.query(Department).first()  # Verificar si hay datos
     if not existing:
         departments = [
-            Department(codigo="FIS", nombre="Facultad de Ingeniería y Sistemas", descripcion="Facultad dedicada a la ingeniería y tecnologías de la información.", correo_contacto="ingenieria@universidad.edu"),
-            Department(codigo="FCB", nombre="Facultad de Ciencias Biológicas", descripcion="Facultad enfocada en estudios biológicos y ambientales.", correo_contacto="biologia@universidad.edu"),
-            Department(codigo="FCH", nombre="Facultad de Ciencias Humanas", descripcion="Facultad dedicada a la educación, sociología y humanidades.", correo_contacto="humanidades@universidad.edu"),
-            Department(codigo="FCM", nombre="Facultad de Ciencias Médicas", descripcion="Facultad de medicina y ciencias de la salud.", correo_contacto="medicina@universidad.edu"),
-            Department(codigo="FCE", nombre="Facultad de Ciencias Económicas", descripcion="Facultad especializada en economía, administración y contaduría.", correo_contacto="economia@universidad.edu")
+            Department(code="FIS", name="Facultad de Ingeniería y Sistemas", description="Facultad dedicada a la ingeniería y tecnologías de la información.", contact_email="ingenieria@universidad.edu"),
+            Department(code="FCB", name="Facultad de Ciencias Biológicas", description="Facultad enfocada en estudios biológicos y ambientales.", contact_email="biologia@universidad.edu"),
+            Department(code="FCH", name="Facultad de Ciencias Humanas", description="Facultad dedicada a la educación, sociología y humanidades.", contact_email="humanidades@universidad.edu"),
+            Department(code="FCM", name="Facultad de Ciencias Médicas", description="Facultad de medicina y ciencias de la salud.", contact_email="medicina@universidad.edu"),
+            Department(code="FCE", name="Facultad de Ciencias Económicas", description="Facultad especializada en economía, administración y contaduría.", contact_email="economia@universidad.edu")
         ]
         db.add_all(departments)
         db.commit()
@@ -47,10 +47,10 @@ def insert_initial_instalation():
     existing = db.query(Facility).first()
     if not existing:
         facilities = [
-            Facility(nombre="Sede Principal", tipo="Sede", direccion="Cra 10"),
-            Facility(nombre="Sede Financiera", tipo="Sede", direccion="Cra 10"),
-            Facility(nombre="Sede Ingenieria", tipo="Sede", direccion="Cra 10"),
-            Facility(nombre="Laboratorio", tipo="Sede", direccion="Cra 10")
+            Facility(name="Sede Principal", type="Sede", address="Cra 10"),
+            Facility(name="Sede Financiera", type="Sede", address="Cra 10"),
+            Facility(name="Sede Ingenieria", type="Sede", address="Cra 10"),
+            Facility(name="Laboratorio", type="Sede", address="Cra 10")
         ]
         db.add_all(facilities)
         db.commit()
@@ -75,6 +75,9 @@ app.include_router(department_routes.router)
 app.include_router(auth_routes.router)
 app.include_router(degree_routes.router)
 app.include_router(template_routes.router)
+
+#Websockets
+app.include_router(websocktes.router)
 
 # Ruta de prueba
 @app.get("/test")

@@ -1,15 +1,7 @@
 from pydantic import BaseModel
-# from schemas.rol import RolResponse
 
-class RolBase(BaseModel):
-    nombre: str
+class RoleBase(BaseModel):
+    name: str
 
-class RolCreate(RolBase):
-    estado: bool = True
-
-# class RolResponse(RolBase):
-#     id: int
-#     rol: RolResponse
-
-#     class Config:
-#         orm_mode = True
+class RoleCreate(RoleBase):
+    status: bool = True

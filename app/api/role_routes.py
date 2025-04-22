@@ -1,4 +1,4 @@
-from app.domain.schemas.rol import RolCreate
+from app.domain.schemas.rol import RoleCreate
 from app.application.role_service import create_role_service, get_roles_service, add_access_facility_to_role_service, \
     get_access_facility_rol_by_id_service
 
@@ -30,12 +30,12 @@ def get_facility_by_role(id_role:int, db: Session = Depends(get_db)):
     return facilities
 
 @router.post("/register")
-async def create_role(rol: RolCreate, db: Session = Depends(get_db)):
-    create_role_service(db, rol)
+async def create_role(rol: RoleCreate, db: Session = Depends(get_db)):
+    await create_role_service(db, rol)
     # Devolver la respuesta con los datos y la ubicación del archivo
     return JSONResponse(
         content={
-            "Rol Creado": rol.nombre
+            "Rol Creado": rol.name
         }
     )
 

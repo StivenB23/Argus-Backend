@@ -1,9 +1,10 @@
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from .base import Base
 
-rol_instalacion = Table(
-    "rol_instalacion",
+# Association table between Role and Facility
+role_facility_association = Table(
+    "role_facility",  # Renamed from "rol_instalacion" to "role_facility"
     Base.metadata,
-    Column("rol_id", Integer, ForeignKey("rol.id"), primary_key=True),
-    Column("instalacion_id", Integer, ForeignKey("instalacion.id"), primary_key=True)
+    Column("role_id", Integer, ForeignKey("role.id"), primary_key=True),
+    Column("facility_id", Integer, ForeignKey("facility.id"), primary_key=True)
 )

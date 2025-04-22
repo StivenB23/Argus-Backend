@@ -2,17 +2,19 @@ from pydantic import BaseModel
 from typing import Optional
 
 class TemplateBase(BaseModel):
-    nombre_plantilla: str
-    unidad_medida: str
-    ancho: int
-    alto: int
-    foto_x:int
-    foto_y:int
-    fondo:str
-    tipo_codigo: Optional[str] = None
-    tipo_codigo_y: Optional[int] = None
-    tipo_codigo_x: Optional[int] = None
-
+    template_name: str
+    unit: str
+    width: int
+    height: int
+    photo_width: float
+    photo_height: int
+    photo_x: int
+    photo_y: int
+    background: str
+    code_type: Optional[str] = None
+    code_type_y: Optional[int] = None
+    code_type_x: Optional[int] = None
 
 class TemplateCreateDTO(TemplateBase):
     pass
+

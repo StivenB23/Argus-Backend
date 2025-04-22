@@ -1,15 +1,15 @@
 from sqlalchemy.orm import Session
 
-from app.domain.models.associations import rol_instalacion
+from app.domain.models.associations import role_facility_association
 from app.domain.models.instalacion import Facility
 from app.domain.models.role import Role
-from app.domain.schemas.rol import RolCreate
+from app.domain.schemas.rol import RoleCreate
 
 def get_roles_service(db: Session):
     return db.query(Role).all()
 
-def create_role_service(db: Session, rol: RolCreate):
-    nuevo_rol = Role(nombre=rol.nombre)
+async def create_role_service(db: Session, rol: RoleCreate):
+    nuevo_rol = Role(name=rol.name)
     db.add(nuevo_rol)
     db.commit()
     db.refresh(nuevo_rol)
@@ -28,7 +28,7 @@ def add_access_facility_to_role_service(db: Session, id_role:str, id_facility:st
 def get_access_facility_rol_by_id_service(db: Session, role_id: int):
     return (
         db.query(Facility)
-        .join(rol_instalacion, Facility.id == rol_instalacion.c.instalacion_id)
-        .filter(rol_instalacion.c.rol_id == role_id)
+        .join(role_facility_association, Facility.id == role_facility_association.c.instalacion_id)
+        .filter(role_facility_association.c.rol_id == role_id)
         .all()
     )

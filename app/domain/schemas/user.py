@@ -1,40 +1,57 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Annotated, Optional
-# from schemas.rol import RolResponse
 
-# Esquema base
+from app.domain.schemas.identityCard import IdentityCardWithTemplateResponse
+from app.domain.schemas.template import TemplateBase
+
 class UserBase(BaseModel):
-    nombre: Annotated[str, Field(..., description="El nombre del usuario", min_length=2, max_length=255)]
-    correo: EmailStr
+    first_name: Annotated[str, Field(..., description="User's first name", min_length=2, max_length=255)]
+    email: EmailStr
 
-# Esquema para registrar un usuario
 class UserCreate(UserBase):
-    tipo_documento: Annotated[str, Field(..., description="Tipo de documento (CC, TI, etc.)", min_length=2, max_length=10)]
-    num_documento: Annotated[str, Field(..., description="Número de documento", min_length=5, max_length=20)]
-    apellido: Annotated[str, Field(..., description="Apellido del usuario", min_length=2, max_length=255)]
-    clave: Annotated[str, Field(..., description="Contraseña del usuario", min_length=8, max_length=255)]
-    rol_id: int
+    document_type: Annotated[str, Field(..., description="Document type (CC, TI, etc.)", min_length=2, max_length=10)]
+    document_number: Annotated[str, Field(..., description="Document number", min_length=5, max_length=20)]
+    last_name: Annotated[str, Field(..., description="User's last name", min_length=2, max_length=255)]
+    password: Annotated[str, Field(..., description="User's password", min_length=8, max_length=255)]
+    photo: str
+    role_id: int
+    template_id: Optional[int] = None
 
-# Esquema para actualizar un usuario (opcionalidad de los campos)
+class UserCreated(BaseModel):
+    id:int
+    role:int
+    document_number:str
+
 class UserUpdate(BaseModel):
-    nombre: Optional[str] = Field(None, description="Nuevo nombre del usuario", min_length=2, max_length=255)
-    apellido: Optional[str] = Field(None, description="Nuevo apellido del usuario", min_length=2, max_length=255)
-    email: Optional[EmailStr] = Field(None, description="Nuevo email del usuario")
-    clave: Optional[str] = Field(None, description="Nueva contraseña", min_length=8, max_length=255)
-    rol_id: Optional[int] = Field(None, description="Nuevo rol del usuario")
+    first_name: Optional[str] = Field(None, description="New first name", min_length=2, max_length=255)
+    last_name: Optional[str] = Field(None, description="New last name", min_length=2, max_length=255)
+    email: Optional[EmailStr] = Field(None, description="New email")
+    password: Optional[str] = Field(None, description="New password", min_length=8, max_length=255)
+    role_id: Optional[int] = Field(None, description="New role ID")
 
 class UserResponse(UserBase):
-     id: int
-     apellido: str
-     rol: str
+    id: int
+    last_name: str
+    role: str
 
-# Esquema para respuesta de usuario
-# class UserResponse(UserBase):
-#     id: int
-#     apellido: str
-#     tipo_documento: str
-#     num_documento: str
-#     rol: RolResponse
+class UserResponseIdentity(UserBase):
+    id: int
+    last_name: str
+    document_type: str
+    document_number: str
+    role: str
+    photo: str
+    identity_card: IdentityCardWithTemplateResponse
 
-#     class Config:
-#         from_attributes = True
+class UsersResponse(BaseModel):
+    id: int
+    document_type: Optional[str] = None
+    document_number: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: str
+    status: Optional[str] = "Activo"
+    role: str
+
+    class Config:
+        from_attributes = True

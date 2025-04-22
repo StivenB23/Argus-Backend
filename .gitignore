@@ -1,4 +1,7 @@
 venv
+.venv
+files
+uploads
 Imagenes
 Rostros encontrados
 # Byte-compiled / optimized / DLL files

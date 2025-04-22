@@ -5,6 +5,9 @@ from fastapi.responses import JSONResponse
 import shutil
 import os
 
+from app.application.card_identity_service import get_identity_card_by_uuid_service
+from app.infraestructure.util.uuid import is_valid_uuid_format
+
 router = APIRouter(tags=["auth"], prefix="/auth")
 from fastapi import APIRouter
 from fastapi import Depends, status
@@ -75,3 +78,21 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=e.__str__()
             )
+
+@router.post("/verify/identities-cards")
+async def authorization_verify_identity_card(code:str = Form(...), db = Depends(get_db)):
+    is_valid_uuid = is_valid_uuid_format(code)
+    print(f"is valid: {is_valid_uuid}")
+    if is_valid_uuid is False:
+        raise HTTPException(status_code=400, detail="Código de Carné Invalido")
+
+    identity_card_exist = await get_identity_card_by_uuid_service(uuid=code, db=db)
+    if identity_card_exist is None:
+        raise HTTPException(status_code=400, detail="Código de Carné no encontrado")
+
+    return JSONResponse(
+        content={
+            "code": code,
+            "access": True
+        }
+    )
