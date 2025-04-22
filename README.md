@@ -30,21 +30,21 @@ Agrega aquí algunas imágenes o gifs de tu proyecto funcionando:
 
 ```bash
 # Clona este repositorio
-git clone https://github.com/StivenB23/Argus-Frontend
+git clone https://github.com/StivenB23/Argus-Backend
 ```
 # Entra en la carpeta del proyecto
 ```bash
-cd Argus-frontend
+cd Argus-Backend
 ```
 
 # Instala las dependencias
 ```bash
-npm install
+pip install -r requeriments.txt
 ```
 
 # Inicia el proyecto
 ```bash
-npm run start
+uvicorn app.main:app --port 8300 
 ```
 
 
