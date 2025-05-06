@@ -37,12 +37,12 @@ async def get_user_by_id(db: Session, id:int):
     user = db.query(User).filter_by(id=id).first()
     if not user:
         raise Exception("Usuario no encontrado")
-    user_response = UserResponse(id=user.id, first_name=user.nombre, last_name=user.apellido, email=user.correo, role=user.rol.nombre)
+    user_response = UserResponse(id=user.id, first_name=user.first_name, last_name=user.last_name, email=user.email, role=user.role.name)
     return user_response
 
 async def get_user_by_id_template_service(db: Session, id:int):
     user = db.query(User).filter_by(id=id).first()
-    if not user:
+    if not user:s
         raise Exception("Usuario no encontrado")
 
     template = user.identity_card.template
@@ -55,6 +55,7 @@ async def get_user_by_id_template_service(db: Session, id:int):
         height=template.height,
         photo_width=template.photo_width,
         photo_height=template.photo_height,
+        labels=template.labels,
         photo_x=template.photo_x,
         photo_y=template.photo_y,
         background=template.background,

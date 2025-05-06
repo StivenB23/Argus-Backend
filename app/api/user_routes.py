@@ -207,6 +207,13 @@ async def delete_user(id:int, db:Session = Depends(get_db)):
             status_code=500  # Código 500 indica error interno del servidor
         )
 
+@router.post("/forgot-password")
+def send_email():
+    send_welcome_email()
+
+
+
+
 @router.post("/email")
 def send_email():
     send_welcome_email()

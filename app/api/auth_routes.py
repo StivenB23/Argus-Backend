@@ -5,7 +5,9 @@ from fastapi.responses import JSONResponse
 import shutil
 import os
 
+from app.application.access_log_service import create_access_log
 from app.application.card_identity_service import get_identity_card_by_uuid_service
+from app.domain.schemas.accessLog import AccessLogCreate
 from app.infraestructure.util.uuid import is_valid_uuid_format
 
 router = APIRouter(tags=["auth"], prefix="/auth")
@@ -65,10 +67,9 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
         print(form_data.username)
         # Verificar si el usuario existe y la contraseña es correcta
         user = await get_user_by_email(db, form_data.username)
-        print(user.nombre)
         if user is None:
             raise Exception("Usuario no Existe")
-        if not check_password(form_data.password, user.clave):
+        if not check_password(form_data.password, user.password):
             raise Exception("Usuario o Contraseña Incorrectos")
         
         token= encode_token({"id":encrypt_text(str(user.id), key_encrypt.encode('utf-8'))})
@@ -84,12 +85,20 @@ async def authorization_verify_identity_card(code:str = Form(...), db = Depends(
     is_valid_uuid = is_valid_uuid_format(code)
     print(f"is valid: {is_valid_uuid}")
     if is_valid_uuid is False:
+        create_log_dto = AccessLogCreate(uuid=code, access_method="login",location=None, identity_card_id=None ,status="failed", reason=f"Código de acceso invalido {code}")
+        await create_access_log(db, create_log_dto)
         raise HTTPException(status_code=400, detail="Código de Carné Invalido")
 
     identity_card_exist = await get_identity_card_by_uuid_service(uuid=code, db=db)
     if identity_card_exist is None:
+        create_log_dto = AccessLogCreate(uuid=code, access_method="login", location=None, identity_card_id=None,
+                                         status="failed", reason=f"Código de Carné no encontrado {code}")
+        await create_access_log(db, create_log_dto)
         raise HTTPException(status_code=400, detail="Código de Carné no encontrado")
 
+    create_log_dto = AccessLogCreate(uuid=code, access_method="login", location=None, identity_card_id=None,
+                                     status="success", reason=f"Acceso Exitoso {code}")
+    await create_access_log(db, create_log_dto)
     return JSONResponse(
         content={
             "code": code,

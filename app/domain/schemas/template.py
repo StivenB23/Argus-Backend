@@ -11,6 +11,7 @@ class TemplateBase(BaseModel):
     photo_x: int
     photo_y: int
     background: str
+    labels:str
     code_type: Optional[str] = None
     code_type_y: Optional[int] = None
     code_type_x: Optional[int] = None

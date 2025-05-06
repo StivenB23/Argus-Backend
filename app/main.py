@@ -60,10 +60,14 @@ def insert_initial_instalation():
 insert_initial_departments()
 insert_initial_instalation()
 
+origins = [
+    "http://localhost:5173",
+]
+
 # Configurar CORS (Permitir peticiones desde frontend)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],  
     allow_headers=["*"],  

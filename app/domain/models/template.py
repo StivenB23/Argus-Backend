@@ -11,6 +11,7 @@ class Template(Base):
     width = Column(Integer)
     height = Column(Integer)
     background = Column(Text)
+    labels = Column(String(255))
 
     photo_width = Column(Integer)
     photo_height = Column(Integer)
