@@ -7,9 +7,9 @@ class Department(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     code = Column(String(30))
-    name = Column(String(30))
+    name = Column(String(50))
     description = Column(Text)
-    contact_email = Column(String(30))
+    contact_email = Column(String(40))
 
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())

@@ -8,12 +8,12 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, index=True)
-    document_type = Column(String(10))
+    document_type = Column(String(10), unique=True, index=True)
     document_number = Column(String(20))
     first_name = Column(String(255))
     last_name = Column(String(255))
     photo = Column(String(255))
-    status = Column(String(30), default="active")
+    status = Column(String(30), default="activo")
     email = Column(String(255), unique=True, index=True)
     password = Column(String(255))
 

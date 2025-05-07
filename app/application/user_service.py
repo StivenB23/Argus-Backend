@@ -20,6 +20,7 @@ async def get_users_service(db:Session):
             first_name=user.first_name,
             last_name=user.last_name,
             email=user.email,
+            date_created=user.created_at,
             status=user.status,
             role=user.role.name if user.role else None
         )
@@ -42,7 +43,7 @@ async def get_user_by_id(db: Session, id:int):
 
 async def get_user_by_id_template_service(db: Session, id:int):
     user = db.query(User).filter_by(id=id).first()
-    if not user:s
+    if not user:
         raise Exception("Usuario no encontrado")
 
     template = user.identity_card.template
@@ -112,5 +113,14 @@ async def update_user_status_by_id(db: Session, id: int, new_status: str):
         db.commit()
         db.refresh(user)
         return {"mensaje": "Estado actualizado correctamente"}
+    else:
+        return {"error": "Usuario no encontrado"}
+
+async def delete_user_by_id(db: Session, id: int):
+    user = db.query(User).filter(User.id == id).first()
+    if user:
+        db.delete(user)
+        db.commit()
+        return {"mensaje": "Usuario eliminado correctamente"}
     else:
         return {"error": "Usuario no encontrado"}

@@ -4,12 +4,12 @@ from typing import Optional
 class TemplateBase(BaseModel):
     template_name: str
     unit: str
-    width: int
-    height: int
+    width: float
+    height: float
     photo_width: float
-    photo_height: int
-    photo_x: int
-    photo_y: int
+    photo_height: float
+    photo_x: float
+    photo_y: float
     background: str
     labels:str
     code_type: Optional[str] = None

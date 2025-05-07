@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, TIMESTAMP, func
+from sqlalchemy import Column, Integer, String, Text, Float, TIMESTAMP, func
 from .base import Base
 
 
@@ -8,19 +8,19 @@ class Template(Base):
     id = Column(Integer, primary_key=True, index=True)
     template_name = Column(String(30))
     unit = Column(String(5))
-    width = Column(Integer)
-    height = Column(Integer)
+    width = Column(Float)
+    height = Column(Float)
     background = Column(Text)
     labels = Column(String(255))
 
-    photo_width = Column(Integer)
-    photo_height = Column(Integer)
-    photo_x = Column(Integer)
-    photo_y = Column(Integer)
+    photo_width = Column(Float)
+    photo_height = Column(Float)
+    photo_x = Column(Float)
+    photo_y = Column(Float)
 
     code_type = Column(String(5), nullable=True)
-    code_type_y = Column(Integer, nullable=True)
-    code_type_x = Column(Integer, nullable=True)
+    code_type_y = Column(Float, nullable=True)
+    code_type_x = Column(Float, nullable=True)
 
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())

@@ -1,6 +1,6 @@
-from app.domain.schemas.rol import RoleCreate
+from app.domain.schemas.rol import RoleCreate, RoleUpdate
 from app.application.role_service import create_role_service, get_roles_service, add_access_facility_to_role_service, \
-    get_access_facility_rol_by_id_service
+    get_access_facility_rol_by_id_service, get_roles_with_facilities_service, update_role_service
 
 from sqlalchemy.orm import Session
 from app.adapters.database.mysql import SessionLocal
@@ -20,9 +20,23 @@ def get_db():
 
 @router.get("/")
 async def get_roles(db: Session = Depends(get_db)):
-    roles = get_roles_service(db)
+    roles = await get_roles_service(db)
     # Devolver la respuesta con los datos y la ubicación del archivo
     return roles
+
+@router.get("/facilities")
+async def get_roles_facilities(db: Session = Depends(get_db)):
+    roles = await get_roles_with_facilities_service(db)
+    # Devolver la respuesta con los datos y la ubicación del archivo
+    return roles
+
+@router.put("/{id}")
+async def update_role(id:int, role_update: RoleUpdate,db: Session = Depends(get_db)):
+    print(f"{role_update.facilities}")
+    role =await update_role_service(db=db, id=id, role_update=role_update)
+    return {"message":"rol update success"}
+
+
 
 @router.get("/{id_role}/facilities")
 def get_facility_by_role(id_role:int, db: Session = Depends(get_db)):

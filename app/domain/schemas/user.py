@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 
 from app.domain.schemas.identityCard import IdentityCardWithTemplateResponse
 from app.domain.schemas.template import TemplateBase
-
+from datetime import datetime
 class UserBase(BaseModel):
     first_name: Annotated[str, Field(..., description="User's first name", min_length=2, max_length=255)]
     email: EmailStr
@@ -52,6 +52,7 @@ class UsersResponse(BaseModel):
     email: str
     status: Optional[str] = "Activo"
     role: str
+    date_created: Optional[datetime] = None
 
     class Config:
         from_attributes = True

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import role_routes, user_routes, department_routes, auth_routes, degree_routes, template_routes, websocktes
+from app.api import role_routes, user_routes, department_routes, facility_routes, auth_routes, degree_routes, template_routes, websocktes
 from app.adapters.database.mysql import engine, SessionLocal
 
 from app.domain.models.base import Base
@@ -14,9 +14,9 @@ app = FastAPI(
     version="1.0.0",
     terms_of_service="https://example.com/terms/",
     contact={
-        "name": "Key Ospina",
+        "name": "Stiven Ospina",
         "url": "https://keyospina.dev",
-        "email": "contacto@keyospina.dev",
+        "email": "stiven23ospi@keyospina.dev",
     },
     license_info={
         "name": "MIT",
@@ -79,6 +79,7 @@ app.include_router(department_routes.router)
 app.include_router(auth_routes.router)
 app.include_router(degree_routes.router)
 app.include_router(template_routes.router)
+app.include_router(facility_routes.router)
 
 #Websockets
 app.include_router(websocktes.router)
