@@ -20,3 +20,11 @@ async def create_identify_card_service(db, create_identity_card:IdentityCardCrea
 async def get_identity_card_by_uuid_service(db:Session, uuid:str):
     identity_card = db.query(IdentityCard).filter_by(uuid=uuid).first()
     return identity_card
+
+async def get_role_from_identity_by_uuid_service(db:Session, uuid=""):
+
+    identity_card = db.query(IdentityCard).filter_by(uuid=uuid).first()
+    role = identity_card.user.role.facilities
+
+    print(f"{role}")
+    return identity_card.user.role
